@@ -1,0 +1,3 @@
+### 测试请求
+GET {{host}}/{{path}}
+Accept: application/json
