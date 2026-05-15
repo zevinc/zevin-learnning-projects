@@ -15,6 +15,7 @@ public class DebugController  {
      */
     @GetMapping("/")
     public Object index(HttpServletRequest request) {
-        return null;
+        return request;
+//        return new SerializableObjectFactory().toSerializableObject(request);
     }
 }

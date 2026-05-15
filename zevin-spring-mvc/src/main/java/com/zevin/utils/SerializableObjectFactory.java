@@ -1,5 +1,7 @@
 package com.zevin.utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.util.ClassUtils;
@@ -10,8 +12,12 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
+@Getter
+@AllArgsConstructor
 public class SerializableObjectFactory {
+    private Function<String, Object> fallback;
     
     public Object toSerializableObject(Object object) {
         if (object == null) {
@@ -106,10 +112,12 @@ public class SerializableObjectFactory {
     
     private Object getPropertyValue(BeanWrapper beanWrapper, PropertyDescriptor propertyDescriptor) {
         try {
-            return beanWrapper.getPropertyValue(propertyDescriptor.getName());
+            var propertyValue = beanWrapper.getPropertyValue(propertyDescriptor.getName());
+            return toSerializableObject(propertyValue);
         }
         catch (Exception e) {
-            return "ERROR[%s]".formatted(e.getMessage());
+            fallback.apply("");
+            return "ERROR: {%s}.".formatted(e.getMessage());
         }
     }
 }
