@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Getter
 @AllArgsConstructor
 public class SerializableObjectFactory {
-    private Function<String, Object> fallback;
+    private Fallback fallback;
     
     public Object toSerializableObject(Object object) {
         if (object == null) {
@@ -116,8 +116,11 @@ public class SerializableObjectFactory {
             return toSerializableObject(propertyValue);
         }
         catch (Exception e) {
-            fallback.apply("");
-            return "ERROR: {%s}.".formatted(e.getMessage());
+            return fallback.getPropertyValue(beanWrapper, propertyDescriptor, e);
         }
+    }
+
+    public interface Fallback {
+        Object getPropertyValue(BeanWrapper beanWrapper, PropertyDescriptor propertyDescriptor, Exception exception);
     }
 }
