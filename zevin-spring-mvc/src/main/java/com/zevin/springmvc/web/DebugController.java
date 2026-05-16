@@ -1,6 +1,8 @@
 package com.zevin.springmvc.web;
 
-import com.zevin.utils.DeepSerializationConverter;
+import com.zevin.serialization.ReferenceHandler;
+import com.zevin.serialization.SerializationConverter;
+import com.zevin.serialization.FallbackHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,6 @@ public class DebugController  {
      */
     @GetMapping("/")
     public Object index(HttpServletRequest request) {
-        return new DeepSerializationConverter(DeepSerializationConverter.Fallback.NULL).toSerializableObject(request);
+        return new SerializationConverter().toSerializableObject(request);
     }
 }
